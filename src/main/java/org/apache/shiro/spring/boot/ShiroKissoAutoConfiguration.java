@@ -1,43 +1,25 @@
 package org.apache.shiro.spring.boot;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.servlet.Filter;
-
-import org.apache.commons.collections.MapUtils;
-import org.apache.shiro.biz.realm.PrincipalRealmListener;
-import org.apache.shiro.biz.spring.ShiroFilterProxyFactoryBean;
-import org.apache.shiro.biz.web.filter.authc.listener.LoginListener;
-import org.apache.shiro.biz.web.filter.authc.listener.LogoutListener;
-import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.boot.cache.ShiroEhCacheConfiguration;
+import org.apache.shiro.spring.boot.kisso.KissoStatelessPrincipalRepository;
 import org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
-import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
-import org.apache.shiro.web.filter.AccessControlFilter;
-import org.apache.shiro.web.servlet.AbstractShiroFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.DelegatingFilterProxyRegistrationBean;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ObjectUtils;
+
+import com.baomidou.kisso.SSOAuthorization;
+import com.baomidou.kisso.common.auth.AuthDefaultImpl;
+import com.baomidou.kisso.web.handler.KissoDefaultHandler;
+import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
 
 
 /**
@@ -225,7 +207,7 @@ import org.springframework.util.ObjectUtils;
  * </table>
  * 自定义Filter通过@Bean注解后，被Spring Boot自动注册到了容器的Filter chain中，这样导致的结果是，所有URL都会被自定义Filter过滤，而不是Shiro中配置的一部分URL。
  * https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-disable-registration-of-a-servlet-or-filter
- * http://www.jianshu.com/p/bf79fdab9c19
+ * https://gitee.com/baomidou/kisso
  */
 @Configuration
 @AutoConfigureBefore(ShiroWebAutoConfiguration.class)
@@ -234,137 +216,25 @@ import org.springframework.util.ObjectUtils;
 @EnableConfigurationProperties({ ShiroKissoProperties.class })
 public class ShiroKissoAutoConfiguration implements ApplicationContextAware {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ShiroKissoAutoConfiguration.class);
+	protected static final Logger LOG = LoggerFactory.getLogger(ShiroKissoAutoConfiguration.class);
 	private ApplicationContext applicationContext;
 	
-	@Autowired
-	private ShiroKissoProperties properties;
-	
-	/**
-	 * 登录监听：实现该接口可监听账号登录失败和成功的状态，从而做业务系统自己的事情，比如记录日志
-	 */
-	@Bean("loginListeners")
-	@ConditionalOnMissingBean(name = "loginListeners")
-	public List<LoginListener> loginListeners() {
-
-		List<LoginListener> loginListeners = new ArrayList<LoginListener>();
-		
-		Map<String, LoginListener> beansOfType = getApplicationContext().getBeansOfType(LoginListener.class);
-		if (!ObjectUtils.isEmpty(beansOfType)) {
-			Iterator<Entry<String, LoginListener>> ite = beansOfType.entrySet().iterator();
-			while (ite.hasNext()) {
-				loginListeners.add(ite.next().getValue());
-			}
-		}
-		
-		return loginListeners;
-	}
-	
-	/**
-	 * Realm 执行监听：实现该接口可监听认证失败和成功的状态，从而做业务系统自己的事情，比如记录日志
-	 */
-	@Bean("realmListeners")
-	@ConditionalOnMissingBean(name = "realmListeners")
-	public List<PrincipalRealmListener> realmListeners() {
-
-		List<PrincipalRealmListener> realmListeners = new ArrayList<PrincipalRealmListener>();
-		
-		Map<String, PrincipalRealmListener> beansOfType = getApplicationContext().getBeansOfType(PrincipalRealmListener.class);
-		if (!ObjectUtils.isEmpty(beansOfType)) {
-			Iterator<Entry<String, PrincipalRealmListener>> ite = beansOfType.entrySet().iterator();
-			while (ite.hasNext()) {
-				realmListeners.add(ite.next().getValue());
-			}
-		}
-		
-		return realmListeners;
-	}
-	
-	/**
-	 * 注销监听：实现该接口可监听账号注销失败和成功的状态，从而做业务系统自己的事情，比如记录日志
-	 */
-	@Bean("logoutListeners")
-	@ConditionalOnMissingBean(name = "logoutListeners")
-	public List<LogoutListener> logoutListeners() {
-
-		List<LogoutListener> logoutListeners = new ArrayList<LogoutListener>();
-		
-		Map<String, LogoutListener> beansOfType = getApplicationContext().getBeansOfType(LogoutListener.class);
-		if (!ObjectUtils.isEmpty(beansOfType)) {
-			Iterator<Entry<String, LogoutListener>> ite = beansOfType.entrySet().iterator();
-			while (ite.hasNext()) {
-				logoutListeners.add(ite.next().getValue());
-			}
-		}
-		
-		return logoutListeners;
-	}
-	
-	/**
-	 * 登录监听：实现该接口可监听账号登录失败和成功的状态，从而做业务系统自己的事情，比如记录日志
-	 */
-	public Map<String, Filter> authcFilters() {
-
-		Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
-
-		Map<String, FilterRegistrationBean> beansOfType = getApplicationContext().getBeansOfType(FilterRegistrationBean.class);
-		if (!ObjectUtils.isEmpty(beansOfType)) {
-			Iterator<Entry<String, FilterRegistrationBean>> ite = beansOfType.entrySet().iterator();
-			while (ite.hasNext()) {
-				Entry<String, FilterRegistrationBean> entry = ite.next();
-				if (entry.getValue().getFilter() instanceof AccessControlFilter) {
-					filters.put(entry.getKey(), entry.getValue().getFilter());
-				}
-			}
-		}
-		
-		return filters;
-	}
-
 	@Bean
 	@ConditionalOnMissingBean
-	protected ShiroFilterChainDefinition shiroFilterChainDefinition() {
-		DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
-		Map<String /* pattert */, String /* Chain names */> pathDefinitions = properties.getFilterChainDefinitionMap();
-		if (MapUtils.isNotEmpty(pathDefinitions)) {
-			chainDefinition.addPathDefinitions(pathDefinitions);
-			return chainDefinition;
-		}
-		chainDefinition.addPathDefinition("/**", "authc");
-		return chainDefinition;
+	public SSOAuthorization kissoAuthorization() {
+		return new AuthDefaultImpl();
 	}
 	
-	@Bean("shiroFilter")
-	@ConditionalOnMissingBean(name = "shiroFilter")
-	protected ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager, ShiroFilterChainDefinition shiroFilterChainDefinition, Map<String, Filter> authcFilters) {
-		
-		ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterProxyFactoryBean();
-        //ShiroFilterFactoryBean filterFactoryBean = new ShiroFilterFactoryBean();
-		
-	    //登录地址：会话不存在时访问的地址
-        filterFactoryBean.setLoginUrl(properties.getLoginUrl());
-        //系统主页：登录成功后跳转路径
-        filterFactoryBean.setSuccessUrl(properties.getSuccessUrl());
-        //异常页面：无权限时的跳转路径
-        filterFactoryBean.setUnauthorizedUrl(properties.getUnauthorizedUrl());
-        //必须设置 SecurityManager
-   		filterFactoryBean.setSecurityManager(securityManager);
-   		//过滤器链：实现对路径规则的拦截过滤
-   		filterFactoryBean.setFilters(authcFilters);
-   		//拦截规则
-        filterFactoryBean.setFilterChainDefinitionMap(shiroFilterChainDefinition.getFilterChainMap());
-        
-        return filterFactoryBean;
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public SSOHandlerInterceptor kissoHandlerInterceptor() {
+		return new KissoDefaultHandler();
+	}
 	
 	@Bean
-	public DelegatingFilterProxyRegistrationBean delegatingFilterProxy(AbstractShiroFilter shiroFilter){
-	    //FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		DelegatingFilterProxyRegistrationBean filterRegistrationBean = new DelegatingFilterProxyRegistrationBean("shiroFilter");
-		 
-		filterRegistrationBean.setOrder(Integer.MAX_VALUE);
-		filterRegistrationBean.addUrlPatterns("/*");
-	    return filterRegistrationBean;
+	@ConditionalOnMissingBean
+	public KissoStatelessPrincipalRepository kissoPrincipalRepository() {
+		return new KissoStatelessPrincipalRepository();
 	}
 	
 	@Override

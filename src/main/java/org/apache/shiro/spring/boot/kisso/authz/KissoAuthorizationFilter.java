@@ -15,7 +15,7 @@ import org.apache.shiro.biz.utils.StringUtils;
 import org.apache.shiro.biz.utils.WebUtils;
 import org.apache.shiro.biz.web.filter.authz.AbstracAuthorizationFilter;
 import org.apache.shiro.spring.boot.kisso.exception.URIUnpermittedException;
-import org.apache.shiro.spring.boot.kisso.token.KissoToken;
+import org.apache.shiro.spring.boot.kisso.token.KissoAccessToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 	        }
 	        
 	        // Step 3、生成Token 
-			AuthenticationToken actoken = new KissoToken(getHost(request), token);
+			AuthenticationToken actoken = new KissoAccessToken(getHost(request), token);
 			
 			// Step 4、委托给Realm进行登录  
 			Subject subject = getSubject(request, response);

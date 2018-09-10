@@ -13,42 +13,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.kisso.token;
+package org.apache.shiro.spring.boot.kisso;
 
-import org.apache.shiro.authc.HostAuthenticationToken;
+import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
 
 import com.baomidou.kisso.security.token.SSOToken;
 
 /**
- * KISSO Access Token
+ * TODO
  * @author 		： <a href="https://github.com/vindell">vindell</a>
  */
 @SuppressWarnings("serial")
-public class KissoToken implements HostAuthenticationToken {
+public class KissoStatelessPrincipal extends ShiroPrincipal {
 
-	// 客户端IP
-	private String host;
-	// SSO Token 令牌
-	private SSOToken token;
+	private final SSOToken token;
 	
-	public KissoToken(String host, SSOToken token) {
-		this.host = host;
+	public KissoStatelessPrincipal(SSOToken token) {
 		this.token = token;
-	}
-
-	@Override
-	public Object getPrincipal() {
-		return this.token;
-	}
-
-	@Override
-	public Object getCredentials() {
-		return this.token;
-	}
-	
-	@Override
-	public String getHost() {
-		return host;
 	}
 
 	public SSOToken getToken() {

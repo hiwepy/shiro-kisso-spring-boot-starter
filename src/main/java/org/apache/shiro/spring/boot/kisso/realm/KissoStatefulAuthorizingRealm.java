@@ -1,18 +1,18 @@
 package org.apache.shiro.spring.boot.kisso.realm;
 
+import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
 import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
-import org.apache.shiro.spring.boot.kisso.KissoTokenPrincipal;
-import org.apache.shiro.spring.boot.kisso.token.KissoToken;
+import org.apache.shiro.spring.boot.kisso.token.KissoLoginToken;
 
 /**
  * Kisso Stateful AuthorizingRealm
  * @author 		： <a href="https://github.com/vindell">vindell</a>
  */
-public class KissoStatefulAuthorizingRealm extends AbstractAuthorizingRealm<KissoTokenPrincipal> {
+public class KissoStatefulAuthorizingRealm extends AbstractAuthorizingRealm<ShiroPrincipal> {
 
 	@Override
 	public Class<?> getAuthenticationTokenClass() {
-		return KissoToken.class;// 此Realm只支持KissoToken
+		return KissoLoginToken.class;// 此Realm只支持KissoLoginToken
 	}
 
 }

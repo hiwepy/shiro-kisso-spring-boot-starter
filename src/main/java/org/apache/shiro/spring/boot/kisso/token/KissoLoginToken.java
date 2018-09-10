@@ -13,27 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.apache.shiro.spring.boot.kisso;
+package org.apache.shiro.spring.boot.kisso.token;
 
-import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
-
-import com.baomidou.kisso.security.token.SSOToken;
+import org.apache.shiro.biz.authc.token.DefaultAuthenticationToken;
 
 /**
- * TODO
+ * KISSO Login Token
  * @author 		： <a href="https://github.com/vindell">vindell</a>
  */
 @SuppressWarnings("serial")
-public class KissoTokenPrincipal extends ShiroPrincipal {
+public class KissoLoginToken extends DefaultAuthenticationToken {
 
-	private final SSOToken token;
-	
-	public KissoTokenPrincipal(SSOToken token) {
-		this.token = token;
-	}
-
-	public SSOToken getToken() {
-		return token;
-	}
 	
 }
