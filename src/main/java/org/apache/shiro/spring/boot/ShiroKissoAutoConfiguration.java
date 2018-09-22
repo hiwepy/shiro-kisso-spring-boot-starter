@@ -1,6 +1,6 @@
 package org.apache.shiro.spring.boot;
 
-import org.apache.shiro.spring.boot.cache.ShiroEhCacheConfiguration;
+import org.apache.shiro.spring.boot.cache.ShiroEhCache2CacheConfiguration;
 import org.apache.shiro.spring.boot.kisso.KissoStatelessPrincipalRepository;
 import org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration;
 import org.slf4j.Logger;
@@ -211,7 +211,7 @@ import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
  */
 @Configuration
 @AutoConfigureBefore(ShiroWebAutoConfiguration.class)
-@AutoConfigureAfter(ShiroEhCacheConfiguration.class)
+@AutoConfigureAfter(ShiroEhCache2CacheConfiguration.class)
 @ConditionalOnProperty(prefix = ShiroKissoProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroKissoProperties.class })
 public class ShiroKissoAutoConfiguration implements ApplicationContextAware {
