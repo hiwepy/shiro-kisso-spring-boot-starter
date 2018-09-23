@@ -1,25 +1,14 @@
 package org.apache.shiro.spring.boot;
 
-import org.apache.shiro.spring.boot.cache.ShiroEhCache2CacheConfiguration;
-import org.apache.shiro.spring.boot.kisso.KissoStatelessPrincipalRepository;
-import org.apache.shiro.spring.config.web.autoconfigure.ShiroWebAutoConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.baomidou.kisso.SSOAuthorization;
-import com.baomidou.kisso.common.auth.AuthDefaultImpl;
-import com.baomidou.kisso.web.handler.KissoDefaultHandler;
-import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
 
 
 /**
@@ -210,32 +199,18 @@ import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
  * https://gitee.com/baomidou/kisso
  */
 @Configuration
-@AutoConfigureBefore(ShiroWebAutoConfiguration.class)
-@AutoConfigureAfter(ShiroEhCache2CacheConfiguration.class)
+@AutoConfigureBefore( name = {
+	"org.apache.shiro.spring.config.web.autoconfigure.ShiroWebFilterConfiguration",  // shiro-spring-boot-web-starter
+	"org.apache.shiro.spring.boot.ShiroBizWebFilterConfiguration" // spring-boot-starter-shiro-biz
+})
 @ConditionalOnProperty(prefix = ShiroKissoProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroKissoProperties.class })
-public class ShiroKissoAutoConfiguration implements ApplicationContextAware {
+public class ShiroKissoWebFilterConfiguration implements ApplicationContextAware {
 
-	protected static final Logger LOG = LoggerFactory.getLogger(ShiroKissoAutoConfiguration.class);
+	protected static final Logger LOG = LoggerFactory.getLogger(ShiroKissoWebFilterConfiguration.class);
 	private ApplicationContext applicationContext;
 	
-	@Bean
-	@ConditionalOnMissingBean
-	public SSOAuthorization kissoAuthorization() {
-		return new AuthDefaultImpl();
-	}
 	
-	@Bean
-	@ConditionalOnMissingBean
-	public SSOHandlerInterceptor kissoHandlerInterceptor() {
-		return new KissoDefaultHandler();
-	}
-	
-	@Bean
-	@ConditionalOnMissingBean
-	public KissoStatelessPrincipalRepository kissoPrincipalRepository() {
-		return new KissoStatelessPrincipalRepository();
-	}
 	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
