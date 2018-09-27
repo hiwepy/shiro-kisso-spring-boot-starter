@@ -78,7 +78,7 @@ public class KissoLogoutFilter extends AbstractLogoutFilter {
 				if(ex != null){
 					logoutListener.onLogoutFail(subject, ex);
 				}else{
-					logoutListener.onLogoutSuccess(request, response);
+					logoutListener.onLogoutSuccess(subject, request, response);
 				}
 			}
 		}
