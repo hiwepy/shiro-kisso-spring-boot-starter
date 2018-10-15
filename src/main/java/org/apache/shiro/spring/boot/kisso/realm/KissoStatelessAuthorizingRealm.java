@@ -11,7 +11,7 @@ import org.apache.shiro.subject.PrincipalCollection;
  * Kisso Stateless AuthorizingRealm
  * @author <a href="https://github.com/vindell">vindell</a>
  */
-public class KissoStatelessAuthorizingRealm extends AbstractAuthorizingRealm<KissoStatelessPrincipal> {
+public class KissoStatelessAuthorizingRealm extends AbstractAuthorizingRealm {
 
 	@Override
 	public Class<?> getAuthenticationTokenClass() {

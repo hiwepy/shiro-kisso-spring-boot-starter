@@ -15,14 +15,12 @@
  */
 package org.apache.shiro.spring.boot.kisso;
 
-import java.util.Set;
-
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
-import org.apache.shiro.biz.authz.principal.ShiroPrincipalRepository;
+import org.apache.shiro.biz.authz.principal.ShiroPrincipalRepositoryImpl;
 import org.apache.shiro.biz.utils.StringUtils;
 import org.apache.shiro.spring.boot.kisso.token.KissoAccessToken;
 
@@ -33,7 +31,7 @@ import com.google.common.collect.Sets;
  * Kisso Token Principal Repository
  * @author 		： <a href="https://github.com/vindell">vindell</a>
  */
-public class KissoStatelessPrincipalRepository implements ShiroPrincipalRepository<KissoStatelessPrincipal> {
+public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryImpl{
 	
 	@Override
 	public AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
@@ -50,39 +48,6 @@ public class KissoStatelessPrincipalRepository implements ShiroPrincipalReposito
 		principal.setPerms(Sets.newHashSet(StringUtils.tokenizeToStringArray(String.valueOf(ssoToken.getClaims().get("perms")))));
 		
 		return new SimpleAuthenticationInfo(principal, ssoToken, "kisso");
-	}
-
-	@Override
-	public Set<String> getRoles(KissoStatelessPrincipal principal) {
-		return principal.getRoles();
-	}
-
-	@Override
-	public Set<String> getRoles(Set<KissoStatelessPrincipal> principals) {
-		Set<String> sets = Sets.newHashSet();
-		for (ShiroPrincipal principal : principals) {
-			sets.addAll(principal.getRoles());
-		}
-		return sets;
-	}
-
-	@Override
-	public Set<String> getPermissions(KissoStatelessPrincipal principal) {
-		return Sets.newHashSet(principal.getPerms());
-	}
-
-	@Override
-	public Set<String> getPermissions(Set<KissoStatelessPrincipal> principals) {
-		Set<String> sets = Sets.newHashSet();
-		for (ShiroPrincipal principal : principals) {
-			sets.addAll(principal.getPerms());
-		}
-		return sets;
-	}
-	
-	@Override
-	public void doLock(KissoStatelessPrincipal principal) {
-		// do nothing
 	}
 	
 }
