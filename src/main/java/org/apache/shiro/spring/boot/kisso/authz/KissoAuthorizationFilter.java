@@ -75,15 +75,6 @@ public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 		} 
 	}
 	
-	/**
-	 * TODO
-	 * @author ：<a href="https://github.com/vindell">vindell</a>
-	 * @param mappedValue
-	 * @param e
-	 * @param request
-	 * @param response
-	 * @return
-	 */
 	@Override
 	protected boolean onAccessFailure(Object mappedValue, Exception e, ServletRequest request,
 			ServletResponse response) throws IOException {
