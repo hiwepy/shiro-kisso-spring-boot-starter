@@ -40,7 +40,7 @@ public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryI
 		// SSO Token 令牌
 		SSOToken ssoToken = kissoToken.getToken();
 		
-		ShiroPrincipal principal = new KissoStatelessPrincipal(ssoToken);
+		KissoStatelessPrincipal principal = new KissoStatelessPrincipal(ssoToken);
 		
 		principal.setUserid(ssoToken.getId());
 		principal.setUserkey(ssoToken.getId());
