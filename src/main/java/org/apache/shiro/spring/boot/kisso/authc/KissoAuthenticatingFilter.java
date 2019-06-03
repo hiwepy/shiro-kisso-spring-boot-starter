@@ -16,8 +16,6 @@
 package org.apache.shiro.spring.boot.kisso.authc;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -26,22 +24,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
+import org.apache.shiro.biz.authc.AuthcResponse;
 import org.apache.shiro.biz.utils.WebUtils;
 import org.apache.shiro.biz.web.filter.authc.AbstractTrustableAuthenticatingFilter;
-import org.apache.shiro.biz.web.filter.authc.listener.LoginListener;
+import org.apache.shiro.biz.web.servlet.http.HttpStatus;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.kisso.SSOHelper;
 import com.baomidou.kisso.common.SSOConstants;
 import com.baomidou.kisso.security.token.SSOToken;
 import com.baomidou.kisso.web.handler.KissoDefaultHandler;
 import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
-import com.google.common.collect.Maps;
-
-import io.jsonwebtoken.impl.DefaultClaims;
 
 /**
  * Kisso 认证 (authentication)过滤器
@@ -103,7 +100,13 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 				if (LOG.isTraceEnabled()) {
 					LOG.trace(mString);
 				}
-				WebUtils.writeJSONString(response, HttpServletResponse.SC_BAD_REQUEST, mString);
+				
+				WebUtils.toHttp(response).setStatus(HttpStatus.SC_BAD_REQUEST);
+				response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+				
+				// Response Authentication status information
+				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(mString));
+				
 				return false;
 			}
 		}
@@ -117,59 +120,19 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 			
 			// Ajax 请求：响应json数据对象
 			if (WebUtils.isAjaxRequest(request)) {
-				WebUtils.writeJSONString(response, HttpServletResponse.SC_UNAUTHORIZED, mString);
+				
+				WebUtils.toHttp(response).setStatus(HttpStatus.SC_UNAUTHORIZED);
+				response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+				
+				// Response Authentication status information
+				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(mString));
+				
 				return false;
 			}
 			// 普通请求：重定向到登录页
 			saveRequestAndRedirectToLogin(request, response);
 			return false;
 		}
-	}
-	
-	@Override
-	protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request,
-			ServletResponse response) throws Exception {
-
-		// Call event listener
-		if (getLoginListeners() != null && getLoginListeners().size() > 0) {
-			for (LoginListener loginListener : getLoginListeners()) {
-				loginListener.onSuccess(token, subject, request, response);
-			}
-		}
-
-		HttpServletRequest httpRequest = WebUtils.toHttp(request);
-		HttpServletResponse httpResponse = WebUtils.toHttp(response);
-
-		ShiroPrincipal principal = (ShiroPrincipal) subject.getPrincipal();
-
-		Map<String, Object> map = Maps.newHashMap();
-		map.put("userid", principal.getUserid());
-		map.put("userkey", principal.getUserkey());
-		map.put("username", principal.getUsername());
-		map.put("roles", principal.getRoles());
-		map.put("perms", principal.getRoles());
-
-		SSOToken ssoToken = SSOToken.create().setIp(httpRequest).setUserAgent(httpRequest).setId(principal.getUserid())
-				.setIssuer("kisso").setClaims(new DefaultClaims(map));
-
-		// 设置登录 COOKIE
-		SSOHelper.setCookie(httpRequest, httpResponse, ssoToken, false);
-
-		if (WebUtils.isAjaxRequest(request)) {
-
-			// Response success status information
-			Map<String, Object> data = new HashMap<String, Object>();
-			data.put("status", "success");
-			data.put("message", "Authentication Success.");
-			// 响应
-			WebUtils.writeJSONString(response, data);
-			
-			return false;
-		}
-		
-		issueSuccessRedirect(request, response);
-		// we handled the success , prevent the chain from continuing:
-		return false;
 	}
 	
 	@Override
@@ -189,8 +152,9 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 	            this.getHandlerInterceptor().preTokenIsNullAjax(httpRequest, httpResponse);
 	            return false;
 	    	}
-			
-			WebUtils.writeJSONString(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthentication.");
+
+			super.writeFailureString(request, response, token);
+
 			return false;
 		}
 		
