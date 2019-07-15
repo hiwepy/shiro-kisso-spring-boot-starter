@@ -143,7 +143,7 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 		HttpServletResponse httpResponse = WebUtils.toHttp(response);
 		
 		// Ajax 请求：响应json数据对象
-		if (WebUtils.isAjaxRequest(request)) {
+		if (WebUtils.isAjaxResponse(request)) {
 			
 			if(this.getHandlerInterceptor() != null) {
 	    		/*
@@ -153,7 +153,7 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 	            return false;
 	    	}
 
-			super.writeFailureString(request, response, token);
+			super.writeFailureString(token, e, request, response);
 
 			return false;
 		}

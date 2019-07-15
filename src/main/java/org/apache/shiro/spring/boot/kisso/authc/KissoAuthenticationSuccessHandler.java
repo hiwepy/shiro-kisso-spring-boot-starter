@@ -44,7 +44,7 @@ public class KissoAuthenticationSuccessHandler implements AuthenticationSuccessH
 	 
 	@Override
 	public boolean supports(AuthenticationToken token) {
-		return SubjectUtils.supports(token.getClass(), KissoLoginToken.class);
+		return SubjectUtils.isAssignableFrom(token.getClass(), KissoLoginToken.class);
 	}
 
 	@Override

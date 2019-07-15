@@ -21,7 +21,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.apache.shiro.biz.web.filter.authc.AbstractLogoutFilter;
-import org.apache.shiro.biz.web.filter.authc.listener.LogoutListener;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.util.WebUtils;
@@ -44,13 +43,6 @@ public class KissoLogoutFilter extends AbstractLogoutFilter {
 		
 		Subject subject = getSubject(request, response);
 		
-		//调用事件监听器
-		if(getLogoutListeners() != null && getLogoutListeners().size() > 0){
-			for (LogoutListener logoutListener : getLogoutListeners()) {
-				logoutListener.beforeLogout(subject, request, response);
-			}
-		}
-		
 		Exception ex = null;
 		boolean result = false;
 		try {
@@ -70,17 +62,6 @@ public class KissoLogoutFilter extends AbstractLogoutFilter {
 		} catch (Exception e) {
 			LOG.debug("Encountered session exception during logout.  This can generally safely be ignored.", e);
 			ex = e;
-		}
-		
-		//调用事件监听器
-		if(getLogoutListeners() != null && getLogoutListeners().size() > 0){
-			for (LogoutListener logoutListener : getLogoutListeners()) {
-				if(ex != null){
-					logoutListener.onFailure(subject, ex);
-				}else{
-					logoutListener.onSuccess(subject, request, response);
-				}
-			}
 		}
 		
 		if(ex != null){
