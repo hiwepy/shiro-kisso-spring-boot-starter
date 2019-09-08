@@ -379,6 +379,30 @@
 		<spring-boot-starter-shiro-biz.version>1.0.5-SNAPSHOT</spring-boot-starter-shiro-biz.version>
 	</properties>
 	
+	<dependencyManagement>
+		<dependencies>
+			<!-- https://mvnrepository.com/artifact/com.baomidou/kisso -->
+			<dependency>
+			    <groupId>com.baomidou</groupId>
+			    <artifactId>kisso</artifactId>
+			    <version>${kisso.version}</version>
+			</dependency>
+	        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
+			<dependency>
+			    <groupId>org.bouncycastle</groupId>
+			    <artifactId>bcprov-jdk15on</artifactId>
+			    <version>${bcprov-jdk15on.version}</version>
+			</dependency>
+			
+			<!-- https://github.com/vindell/spring-boot-starter-shiro-biz -->
+			<dependency>
+				<groupId>com.github.vindell</groupId>
+				<artifactId>spring-boot-starter-shiro-biz</artifactId>
+				<version>${spring-boot-starter-shiro-biz.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
 	<dependencies>
 		
 		<!-- Java Servlet API -->
@@ -437,20 +461,17 @@
 		<dependency>
 		    <groupId>com.baomidou</groupId>
 		    <artifactId>kisso</artifactId>
-		    <version>${kisso.version}</version>
 		</dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
 		<dependency>
 		    <groupId>org.bouncycastle</groupId>
 		    <artifactId>bcprov-jdk15on</artifactId>
-		    <version>${bcprov-jdk15on.version}</version>
 		</dependency>
 		
 		<!-- https://github.com/vindell/spring-boot-starter-shiro-biz -->
 		<dependency>
 			<groupId>com.github.vindell</groupId>
 			<artifactId>spring-boot-starter-shiro-biz</artifactId>
-			<version>${spring-boot-starter-shiro-biz.version}</version>
 		</dependency>
 		
 	</dependencies>
