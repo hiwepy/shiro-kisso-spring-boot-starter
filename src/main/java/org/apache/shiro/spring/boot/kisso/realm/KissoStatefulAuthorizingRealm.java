@@ -5,7 +5,7 @@ import org.apache.shiro.spring.boot.kisso.token.KissoLoginToken;
 
 /**
  * Kisso Stateful AuthorizingRealm
- * @author 		： <a href="https://github.com/vindell">vindell</a>
+ * @author 		： <a href="https://github.com/hiwepy">hiwepy</a>
  */
 public class KissoStatefulAuthorizingRealm extends AbstractAuthorizingRealm {
 

@@ -9,7 +9,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 /**
  * Kisso Stateless AuthorizingRealm
- * @author <a href="https://github.com/vindell">vindell</a>
+ * @author <a href="https://github.com/hiwepy">hiwepy</a>
  */
 public class KissoStatelessAuthorizingRealm extends AbstractAuthorizingRealm {
 

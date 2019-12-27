@@ -29,7 +29,7 @@ import com.baomidou.kisso.security.token.SSOToken;
 
 /**
  * Kisso 授权 (authorization) 过滤器
- * @author ： <a href="https://github.com/vindell">vindell</a>
+ * @author ： <a href="https://github.com/hiwepy">hiwepy</a>
  */
 public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 
