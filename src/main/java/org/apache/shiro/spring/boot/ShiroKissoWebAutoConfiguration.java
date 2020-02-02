@@ -4,6 +4,7 @@ import org.apache.shiro.spring.boot.kisso.KissoStatelessPrincipalRepository;
 import org.apache.shiro.spring.web.config.AbstractShiroWebConfiguration;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.baomidou.kisso.SSOAuthorization;
 import com.baomidou.kisso.common.auth.AuthDefaultImpl;
+import com.baomidou.kisso.starter.KissoAutoConfiguration;
 import com.baomidou.kisso.web.handler.KissoDefaultHandler;
 import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
 
@@ -25,6 +27,7 @@ import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
 })
 @ConditionalOnProperty(prefix = ShiroKissoProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroKissoProperties.class })
+@ImportAutoConfiguration(KissoAutoConfiguration.class)
 public class ShiroKissoWebAutoConfiguration extends AbstractShiroWebConfiguration implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;
