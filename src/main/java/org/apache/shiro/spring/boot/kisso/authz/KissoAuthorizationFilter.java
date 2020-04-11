@@ -1,6 +1,7 @@
 package org.apache.shiro.spring.boot.kisso.authz;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -91,7 +92,8 @@ public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 			
 			/* AJAX 请求 403 未授权访问提示 */
 			WebUtils.toHttp(response).setStatus(HttpStatus.SC_FORBIDDEN);
-			response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 			
 			// 响应异常状态信息
 			// URI验证失败
