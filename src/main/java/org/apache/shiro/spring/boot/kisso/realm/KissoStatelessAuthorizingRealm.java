@@ -1,5 +1,8 @@
 package org.apache.shiro.spring.boot.kisso.realm;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
@@ -28,7 +31,9 @@ public class KissoStatelessAuthorizingRealm extends AbstractAuthorizingRealm {
 		
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		// 解析角色并设置
-		info.setRoles(principal.getRoles());
+		Optional.ofNullable(principal.getRoles()).ifPresent(roles -> {
+			info.setRoles(roles.stream().map(role -> role.getKey()).collect(Collectors.toSet()));
+		});
 		// 解析权限并设置
 		info.setStringPermissions(principal.getPerms());
 		return info;

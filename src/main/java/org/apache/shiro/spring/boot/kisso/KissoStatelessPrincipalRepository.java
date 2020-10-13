@@ -15,16 +15,20 @@
  */
 package org.apache.shiro.spring.boot.kisso;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
 import org.apache.shiro.biz.authz.principal.ShiroPrincipalRepositoryImpl;
-import org.apache.shiro.biz.utils.StringUtils;
 import org.apache.shiro.spring.boot.kisso.token.KissoAccessToken;
 
 import com.baomidou.kisso.security.token.SSOToken;
+import com.github.hiwepy.jwt.JwtPayload.RolePair;
+import com.github.hiwepy.jwt.utils.StringUtils;
 import com.google.common.collect.Sets;
 
 /**
@@ -44,7 +48,14 @@ public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryI
 		
 		principal.setUserid(ssoToken.getId());
 		principal.setUserkey(ssoToken.getId());
-		principal.setRoles(Sets.newHashSet(StringUtils.tokenizeToStringArray(String.valueOf(ssoToken.getClaims().get("roles")))));
+		Optional.ofNullable(ssoToken.getClaims().get("roles")).ifPresent(roles -> {
+			principal.setRoles(Stream.of(StringUtils.tokenizeToStringArray(roles.toString())).map(role -> {
+				RolePair pair = new RolePair();
+				pair.setKey(role);
+				pair.setValue(role);
+				return pair;
+			}).collect(Collectors.toList()));
+		});
 		principal.setPerms(Sets.newHashSet(StringUtils.tokenizeToStringArray(String.valueOf(ssoToken.getClaims().get("perms")))));
 		
 		return new SimpleAuthenticationInfo(principal, ssoToken, "kisso");
