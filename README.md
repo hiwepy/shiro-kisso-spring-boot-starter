@@ -4,22 +4,14 @@ shiro starter for spring boot
 ### 说明
 
 
- > 基于 Shiro 的 Spring Boot Starter 实现
-
-1. 默认的Handler实现
-2. 实现基于责任链式的消息分发
+ > 基于 Shiro + Kisso 的单点登录 Spring Boot Starter 实现
 
 ### Maven
 
 ``` xml
 <dependency>
-	<groupId>${project.groupId}</groupId>
+	<groupId>com.github.hiwepy</groupId>
 	<artifactId>shiro-kisso-spring-boot-starter</artifactId>
-	<version>${project.version}</version>
+	<version>1.0.0.RELEASE</version>
 </dependency>
 ```
-
-### Sample
-
-[https://github.com/vindell/spring-boot-starter-samples/tree/master/spring-boot-sample-shiro-kisso](https://github.com/vindell/spring-boot-starter-samples/tree/master/spring-boot-sample-shiro-kisso "spring-boot-sample-shiro-kisso")
-
