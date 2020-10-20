@@ -27,6 +27,7 @@ import org.apache.shiro.biz.authz.principal.ShiroPrincipalRepositoryImpl;
 import org.apache.shiro.spring.boot.kisso.token.KissoAccessToken;
 
 import com.baomidou.kisso.security.token.SSOToken;
+import com.github.hiwepy.jwt.JwtClaims;
 import com.github.hiwepy.jwt.JwtPayload.RolePair;
 import com.github.hiwepy.jwt.utils.StringUtils;
 import com.google.common.collect.Sets;
@@ -48,7 +49,7 @@ public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryI
 		
 		principal.setUserid(ssoToken.getId());
 		principal.setUserkey(ssoToken.getId());
-		Optional.ofNullable(ssoToken.getClaims().get("roles")).ifPresent(roles -> {
+		Optional.ofNullable(ssoToken.getClaims().get(JwtClaims.ROLES)).ifPresent(roles -> {
 			principal.setRoles(Stream.of(StringUtils.tokenizeToStringArray(roles.toString())).map(role -> {
 				RolePair pair = new RolePair();
 				pair.setKey(role);
@@ -56,7 +57,7 @@ public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryI
 				return pair;
 			}).collect(Collectors.toList()));
 		});
-		principal.setPerms(Sets.newHashSet(StringUtils.tokenizeToStringArray(String.valueOf(ssoToken.getClaims().get("perms")))));
+		principal.setPerms(Sets.newHashSet(StringUtils.tokenizeToStringArray(String.valueOf(ssoToken.getClaims().get(JwtClaims.PERMS)))));
 		
 		return new SimpleAuthenticationInfo(principal, ssoToken, "kisso");
 	}

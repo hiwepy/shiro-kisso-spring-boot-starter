@@ -13,7 +13,7 @@
 	<groupId>com.github.hiwepy</groupId>
 	<artifactId>shiro-kisso-spring-boot-starter</artifactId>
 	<description>Spring Boot Starter For Shiro With KISSO</description>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hiwepy/${project.artifactId}</url>
 	<packaging>jar</packaging>
@@ -378,31 +378,7 @@
 		<maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
 		<spring-boot-starter-shiro-biz.version>1.0.7.RELEASE</spring-boot-starter-shiro-biz.version>
 	</properties>
-	
-	<dependencyManagement>
-		<dependencies>
-			<!-- https://mvnrepository.com/artifact/com.baomidou/kisso -->
-			<dependency>
-			    <groupId>com.baomidou</groupId>
-			    <artifactId>kisso</artifactId>
-			    <version>${kisso.version}</version>
-			</dependency>
-	        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
-			<dependency>
-			    <groupId>org.bouncycastle</groupId>
-			    <artifactId>bcprov-jdk15on</artifactId>
-			    <version>${bcprov-jdk15on.version}</version>
-			</dependency>
-			
-			<!-- https://github.com/hiwepy/shiro-biz-spring-boot-starter -->
-			<dependency>
-				<groupId>com.github.hiwepy</groupId>
-				<artifactId>shiro-biz-spring-boot-starter</artifactId>
-				<version>${spring-boot-starter-shiro-biz.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-	
+	 
 	<dependencies>
 		
 		<!-- Java Servlet API -->
@@ -461,17 +437,19 @@
 		<dependency>
 		    <groupId>com.baomidou</groupId>
 		    <artifactId>kisso</artifactId>
+		    <version>${kisso.version}</version>
 		</dependency>
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
 		<dependency>
 		    <groupId>org.bouncycastle</groupId>
 		    <artifactId>bcprov-jdk15on</artifactId>
+		    <version>${bcprov-jdk15on.version}</version>
 		</dependency>
-		
 		<!-- https://github.com/hiwepy/shiro-biz-spring-boot-starter -->
 		<dependency>
 			<groupId>com.github.hiwepy</groupId>
 			<artifactId>shiro-biz-spring-boot-starter</artifactId>
+			<version>${spring-boot-starter-shiro-biz.version}</version>
 		</dependency>
 		
 	</dependencies>
