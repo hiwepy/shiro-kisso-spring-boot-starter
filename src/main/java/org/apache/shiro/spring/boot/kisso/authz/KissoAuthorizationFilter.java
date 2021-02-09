@@ -91,7 +91,7 @@ public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 			} 
 			
 			/* AJAX 请求 403 未授权访问提示 */
-			WebUtils.toHttp(response).setStatus(HttpStatus.SC_FORBIDDEN);
+			WebUtils.toHttp(response).setStatus(HttpStatus.SC_OK);
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 			response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 			
@@ -100,7 +100,7 @@ public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 			if (e instanceof URIUnpermittedException) {
 				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail("URI Unpermitted Access."));
 			} else {
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(mString));
+				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_FORBIDDEN, mString));
 			}
 			
         } else {
