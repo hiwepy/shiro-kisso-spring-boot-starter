@@ -71,4 +71,9 @@ public class KissoAuthenticationSuccessHandler implements AuthenticationSuccessH
 
 	}
 
+	@Override
+	public int getOrder() {
+		return Integer.MAX_VALUE - 2;
+	}
+	
 }
