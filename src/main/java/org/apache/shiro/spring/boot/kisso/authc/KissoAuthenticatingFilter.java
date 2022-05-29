@@ -23,6 +23,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.authc.AuthcResponse;
@@ -34,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.kisso.SSOHelper;
 import com.baomidou.kisso.common.SSOConstants;
 import com.baomidou.kisso.security.token.SSOToken;
@@ -49,27 +49,29 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 
 	private static final Logger LOG = LoggerFactory.getLogger(KissoAuthenticatingFilter.class);
 	private SSOHandlerInterceptor handlerInterceptor;
-	
-	public KissoAuthenticatingFilter() {
+
+	private ObjectMapper objectMapper;
+	public KissoAuthenticatingFilter(ObjectMapper objectMapper) {
 		super();
+		this.objectMapper = objectMapper;
 	}
-	
+
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 		// 判断是否无状态
 		if (isSessionStateless()) {
 			// 获取当前请求 Kisso Token
 	        SSOToken ssoToken = SSOHelper.getSSOToken(WebUtils.toHttp(request));
-			// 判断是否认证请求  
+			// 判断是否认证请求
 	        if (ssoToken != null) {
 	        	/*
 				 * 正常请求，request 设置 token 减少二次解密
 				 */
                 request.setAttribute(SSOConstants.SSO_TOKEN_ATTR, ssoToken);
-				// Step 1、生成Shiro Token 
+				// Step 1、生成Shiro Token
 				AuthenticationToken token = createToken(request, response);
 				try {
-					//Step 2、委托给Realm进行登录  
+					//Step 2、委托给Realm进行登录
 					Subject subject = getSubject(request, response);
 					subject.login(token);
 					//Step 3、执行授权成功后的函数
@@ -77,20 +79,20 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 				} catch (AuthenticationException e) {
 					//Step 4、执行授权失败后的函数
 					return onAccessFailure(token, e, request, response);
-				} 
+				}
 			}
 			// 要求认证
 			return false;
 		}
 		return super.isAccessAllowed(request, response, mappedValue);
 	}
-	
+
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-		
-		// 1、判断是否登录请求 
+
+		// 1、判断是否登录请求
 		if (isLoginRequest(request, response)) {
-			
+
 			if (isLoginSubmission(request, response)) {
 				if (LOG.isTraceEnabled()) {
 					LOG.trace("Login submission detected.  Attempting to execute login.");
@@ -101,35 +103,35 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 				if (LOG.isTraceEnabled()) {
 					LOG.trace(mString);
 				}
-				
+
 				WebUtils.toHttp(response).setStatus(HttpStatus.SC_OK);
 				response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 				response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-				
+
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_BAD_REQUEST, mString));
-				
+				objectMapper.writeValue(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_BAD_REQUEST, mString));
+
 				return false;
 			}
 		}
 		// 2、未授权情况
 		else {
-			
+
 			String mString = "Attempting to access a path which requires authentication. ";
-			if (LOG.isTraceEnabled()) { 
+			if (LOG.isTraceEnabled()) {
 				LOG.trace(mString);
 			}
-			
+
 			// Ajax 请求：响应json数据对象
 			if (WebUtils.isAjaxRequest(request)) {
-				
+
 				WebUtils.toHttp(response).setStatus(HttpStatus.SC_OK);
 				response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 				response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-				
+
 				// Response Authentication status information
-				JSONObject.writeJSONString(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_UNAUTHORIZED, mString));
-				
+				objectMapper.writeValue(response.getWriter(), AuthcResponse.fail(HttpStatus.SC_UNAUTHORIZED, mString));
+
 				return false;
 			}
 			// 普通请求：重定向到登录页
@@ -137,17 +139,17 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 			return false;
 		}
 	}
-	
+
 	@Override
 	protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request,
 			ServletResponse response) {
-		
+
 		HttpServletRequest httpRequest = WebUtils.toHttp(request);
 		HttpServletResponse httpResponse = WebUtils.toHttp(response);
-		
+
 		// Ajax 请求：响应json数据对象
 		if (WebUtils.isAjaxResponse(request)) {
-			
+
 			if(this.getHandlerInterceptor() != null) {
 	    		/*
 	             * Handler 处理 AJAX 请求
@@ -160,7 +162,7 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 
 			return false;
 		}
-		
+
 		if(this.getHandlerInterceptor() != null) {
 			/*
 			 * token 为空，调用 Handler 处理
@@ -174,20 +176,20 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 					e1.printStackTrace();
 				}
 	        }
-	       
+
 		} else {
-			
+
 			// 普通请求：重定向到登录页
 			try {
 				saveRequestAndRedirectToLogin(request, response);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			
+
 		}
 		return false;
 	}
-	
+
 	public SSOHandlerInterceptor getHandlerInterceptor() {
         if (handlerInterceptor == null) {
             return KissoDefaultHandler.getInstance();

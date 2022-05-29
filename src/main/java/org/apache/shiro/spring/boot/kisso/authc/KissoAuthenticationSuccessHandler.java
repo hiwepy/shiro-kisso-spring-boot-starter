@@ -22,6 +22,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.biz.authc.AuthenticationSuccessHandler;
 import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
@@ -36,12 +37,14 @@ import com.google.common.collect.Maps;
 
 import io.jsonwebtoken.impl.DefaultClaims;
 
-
 public class KissoAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-	public KissoAuthenticationSuccessHandler() {
+	private ObjectMapper objectMapper;
+	public KissoAuthenticationSuccessHandler(ObjectMapper objectMapper) {
+		super();
+		this.objectMapper = objectMapper;
 	}
-	 
+
 	@Override
 	public boolean supports(AuthenticationToken token) {
 		return SubjectUtils.isAssignableFrom(token.getClass(), KissoLoginToken.class);
@@ -50,7 +53,7 @@ public class KissoAuthenticationSuccessHandler implements AuthenticationSuccessH
 	@Override
 	public void onAuthenticationSuccess(AuthenticationToken token, ServletRequest request, ServletResponse response,
 			Subject subject) {
-		
+
 		HttpServletRequest httpRequest = WebUtils.toHttp(request);
 		HttpServletResponse httpResponse = WebUtils.toHttp(response);
 
@@ -75,5 +78,5 @@ public class KissoAuthenticationSuccessHandler implements AuthenticationSuccessH
 	public int getOrder() {
 		return Integer.MAX_VALUE - 2;
 	}
-	
+
 }
