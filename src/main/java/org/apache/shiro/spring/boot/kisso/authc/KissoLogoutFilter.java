@@ -30,8 +30,12 @@ import org.slf4j.LoggerFactory;
 import com.baomidou.kisso.SSOHelper;
 
 /**
- * Kisso 注销过滤器：清除Shiro状态数据和自身缓存数据
+ * Logout filter for Kisso SSO authentication.
+ * <p>Clears both Shiro session state and Kisso SSO cookie data
+ * upon logout.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class KissoLogoutFilter extends AbstractLogoutFilter {
 

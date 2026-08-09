@@ -42,8 +42,13 @@ import com.baomidou.kisso.web.handler.KissoDefaultHandler;
 import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
 
 /**
- * Kisso 认证 (authentication)过滤器
+ * Authentication filter for Kisso SSO token-based authentication.
+ * <p>Intercepts requests, extracts the Kisso SSO token from cookies,
+ * and delegates authentication to Shiro's subject.login() mechanism.
+ * Handles both stateless and stateful authentication modes.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFilter {
 
@@ -188,6 +193,11 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
 		return false;
 	}
 	
+	/**
+	 * Returns the SSO handler interceptor, defaulting to {@link KissoDefaultHandler}.
+	 *
+	 * @return the handler interceptor
+	 */
 	public SSOHandlerInterceptor getHandlerInterceptor() {
         if (handlerInterceptor == null) {
             return KissoDefaultHandler.getInstance();
@@ -195,6 +205,11 @@ public class KissoAuthenticatingFilter extends AbstractTrustableAuthenticatingFi
         return handlerInterceptor;
     }
 
+    /**
+     * Sets the SSO handler interceptor.
+     *
+     * @param handlerInterceptor the handler interceptor
+     */
     public void setHandlerInterceptor(SSOHandlerInterceptor handlerInterceptor) {
         this.handlerInterceptor = handlerInterceptor;
     }

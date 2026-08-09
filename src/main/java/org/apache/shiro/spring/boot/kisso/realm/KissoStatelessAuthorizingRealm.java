@@ -11,8 +11,12 @@ import org.apache.shiro.spring.boot.kisso.token.KissoAccessToken;
 import org.apache.shiro.subject.PrincipalCollection;
 
 /**
- * Kisso Stateless AuthorizingRealm
+ * Shiro authorizing realm for Kisso stateless (token-based) authentication.
+ * <p>Supports {@link KissoAccessToken} instances and extracts roles and permissions
+ * from the JWT claims embedded in the SSO token.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class KissoStatelessAuthorizingRealm extends AbstractAuthorizingRealm {
 

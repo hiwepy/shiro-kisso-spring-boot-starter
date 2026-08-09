@@ -20,8 +20,12 @@ import org.apache.shiro.authc.HostAuthenticationToken;
 import com.baomidou.kisso.security.token.SSOToken;
 
 /**
- * KISSO Access Token
+ * Authentication token wrapping a Kisso {@link SSOToken} for stateless authentication.
+ * <p>Implements {@link HostAuthenticationToken} to carry the client host information
+ * along with the SSO token for authentication.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @SuppressWarnings("serial")
 public class KissoAccessToken implements HostAuthenticationToken {

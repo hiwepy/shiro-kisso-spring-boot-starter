@@ -4,8 +4,11 @@ import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
 import org.apache.shiro.spring.boot.kisso.token.KissoLoginToken;
 
 /**
- * Kisso Stateful AuthorizingRealm
+ * Shiro authorizing realm for Kisso stateful (cookie-based) authentication.
+ * <p>Supports {@link KissoLoginToken} instances for stateful SSO login flows.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class KissoStatefulAuthorizingRealm extends AbstractAuthorizingRealm {
 

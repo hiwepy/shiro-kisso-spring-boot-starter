@@ -12,9 +12,13 @@ import org.springframework.context.annotation.Configuration;
 
 
 /**
- * 自定义Filter通过@Bean注解后，被Spring Boot自动注册到了容器的Filter chain中，这样导致的结果是，所有URL都会被自定义Filter过滤，而不是Shiro中配置的一部分URL。
- * https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#howto-disable-registration-of-a-servlet-or-filter
- * https://gitee.com/baomidou/kisso
+ * Filter configuration for Shiro Kisso web integration.
+ * <p>Registers Kisso-specific filters into the Shiro filter chain.
+ * Activated only when {@code shiro.kisso.enabled=true}.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ * @see <a href="https://gitee.com/baomidou/kisso">Kisso Documentation</a>
  */
 @Configuration
 @AutoConfigureBefore( name = {

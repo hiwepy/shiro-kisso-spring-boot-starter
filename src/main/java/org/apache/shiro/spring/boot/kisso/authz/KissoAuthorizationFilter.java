@@ -29,8 +29,13 @@ import com.baomidou.kisso.common.auth.AuthDefaultImpl;
 import com.baomidou.kisso.security.token.SSOToken;
 
 /**
- * Kisso 授权 (authorization) 过滤器
+ * Authorization filter for Kisso SSO authentication.
+ * <p>Performs URI permission checks using Kisso's authorization mechanism,
+ * then delegates to Shiro's subject.login() for authentication. Handles
+ * both stateless (AJAX) and stateful (redirect) authorization failure modes.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 
@@ -121,10 +126,20 @@ public class KissoAuthorizationFilter extends AbstracAuthorizationFilter {
 		return false;
 	}
 
+	/**
+	 * Returns the SSO authorization implementation.
+	 *
+	 * @return the SSO authorization
+	 */
 	public SSOAuthorization getAuthorization() {
 		return authorization;
 	}
 
+	/**
+	 * Sets the SSO authorization implementation.
+	 *
+	 * @param authorization the SSO authorization
+	 */
 	public void setAuthorization(SSOAuthorization authorization) {
 		this.authorization = authorization;
 	}

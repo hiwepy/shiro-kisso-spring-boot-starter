@@ -33,8 +33,12 @@ import io.github.easy4j.jwt.utils.StringUtils;
 import com.google.common.collect.Sets;
 
 /**
- * Kisso Token Principal Repository
+ * Principal repository for Kisso stateless authentication.
+ * <p>Extracts user identity, roles, and permissions from the Kisso {@link SSOToken}
+ * and builds a {@link KissoStatelessPrincipal} with the extracted information.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryImpl{
 	

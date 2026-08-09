@@ -18,8 +18,12 @@ package org.apache.shiro.spring.boot.kisso.exception;
 import org.apache.shiro.authc.AuthenticationException;
 
 /**
- * URI未授权异常
+ * Exception thrown when a URI access is not permitted.
+ * <p>Extends {@link AuthenticationException} to indicate that the requested
+ * URI does not have sufficient permissions in the Kisso authorization check.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class URIUnpermittedException extends AuthenticationException {
 

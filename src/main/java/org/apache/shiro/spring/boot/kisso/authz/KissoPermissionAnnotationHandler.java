@@ -23,8 +23,13 @@ import org.apache.shiro.authz.aop.AuthorizingAnnotationHandler;
 import com.baomidou.kisso.annotation.Permission;
 
 /**
- * TODO
+ * Annotation handler for Kisso {@link Permission} annotations.
+ * <p>Processes Kisso permission annotations on methods and classes,
+ * performing permission checks via Shiro's subject when the annotation
+ * is not marked as ignored.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 public class KissoPermissionAnnotationHandler extends AuthorizingAnnotationHandler {
     

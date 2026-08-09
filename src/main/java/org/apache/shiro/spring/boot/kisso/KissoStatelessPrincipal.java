@@ -20,8 +20,12 @@ import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
 import com.baomidou.kisso.security.token.SSOToken;
 
 /**
- * TODO
+ * Principal for Kisso stateless authentication.
+ * <p>Wraps the Kisso {@link SSOToken} and extends {@link ShiroPrincipal}
+ * to carry SSO token information throughout the authentication flow.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @SuppressWarnings("serial")
 public class KissoStatelessPrincipal extends ShiroPrincipal {

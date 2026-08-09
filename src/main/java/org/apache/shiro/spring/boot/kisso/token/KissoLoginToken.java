@@ -18,8 +18,12 @@ package org.apache.shiro.spring.boot.kisso.token;
 import org.apache.shiro.biz.authc.token.DefaultAuthenticationToken;
 
 /**
- * KISSO Login Token
+ * Authentication token for Kisso stateful (cookie-based) login.
+ * <p>Extends {@link DefaultAuthenticationToken} for use with the
+ * {@link KissoStatefulAuthorizingRealm}.</p>
+ *
  * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
  */
 @SuppressWarnings("serial")
 public class KissoLoginToken extends DefaultAuthenticationToken {

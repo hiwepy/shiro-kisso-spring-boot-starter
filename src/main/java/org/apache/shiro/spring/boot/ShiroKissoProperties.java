@@ -17,6 +17,14 @@ package org.apache.shiro.spring.boot;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Configuration properties for Shiro Kisso integration.
+ * <p>Binds to the {@code shiro.kisso} prefix and controls whether
+ * Kisso-based SSO authentication is enabled.</p>
+ *
+ * @author [@Loong Wan](https://github.com/loong10k)
+ * @since 1.0.0
+ */
 @ConfigurationProperties(ShiroKissoProperties.PREFIX)
 public class ShiroKissoProperties {
 
