@@ -15,19 +15,22 @@
  */
 package org.apache.shiro.spring.boot.kisso.authc;
 
-import java.util.Locale;
+import java.io.IOException;
 
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.biz.web.filter.authc.AbstractLogoutFilter;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.filter.authc.LogoutFilter;
-import org.apache.shiro.web.util.WebUtils;
+import org.apache.shiro.spring.boot.kisso.KissoCookieHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.baomidou.kisso.SSOHelper;
 
 /**
  * Logout filter for Kisso SSO authentication.
@@ -37,42 +40,36 @@ import com.baomidou.kisso.SSOHelper;
  * @author [@Loong Wan](https://github.com/loong10k)
  * @since 1.0.0
  */
-public class KissoLogoutFilter extends AbstractLogoutFilter {
+public class KissoLogoutFilter implements Filter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LogoutFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(KissoLogoutFilter.class);
 
 	@Override
-	protected boolean preHandle(ServletRequest request, ServletResponse response)
-			throws Exception {
-		
-		Subject subject = getSubject(request, response);
-		
-		Exception ex = null;
-		boolean result = false;
-		try {
-			
-			// Check if POST only logout is enabled
-	        if (isPostOnlyLogout()) {
+	public void init(FilterConfig filterConfig) throws ServletException {
+		// no-op
+	}
 
-	            // check if the current request's method is a POST, if not redirect
-	            if (!WebUtils.toHttp(request).getMethod().toUpperCase(Locale.ENGLISH).equals("POST")) {
-	               return onLogoutRequestNotAPost(request, response);
-	            }
-	        }
-	        
-			// do real thing
-	        subject.logout();
-			result = SSOHelper.clearLogin(WebUtils.toHttp(request), WebUtils.toHttp(response));
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
+			throws IOException, ServletException {
+
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+		try {
+			Subject subject = SecurityUtils.getSubject();
+			subject.logout();
+			KissoCookieHelper.clearLogin(httpRequest, httpResponse);
 		} catch (Exception e) {
 			LOG.debug("Encountered session exception during logout.  This can generally safely be ignored.", e);
-			ex = e;
 		}
-		
-		if(ex != null){
-			throw ex;
-		}
-		
-		return result;
+
+		filterChain.doFilter(request, response);
 	}
-	
+
+	@Override
+	public void destroy() {
+		// no-op
+	}
+
 }

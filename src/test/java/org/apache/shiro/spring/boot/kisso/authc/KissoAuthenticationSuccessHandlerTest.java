@@ -1,27 +1,13 @@
-/*
- * Copyright (c) 2018, hiwepy (https://github.com/hiwepy).
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package org.apache.shiro.spring.boot.kisso.authc;
 
+import org.apache.shiro.spring.boot.kisso.token.KissoLoginToken;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Unit tests for {{ @link KissoAuthenticationSuccessHandler }}.
+ * Unit tests for {@link KissoAuthenticationSuccessHandler}.
  *
  * @author [@Loong Wan](https://github.com/loong10k)
  * @since 1.0.0
@@ -30,9 +16,30 @@ import static org.assertj.core.api.Assertions.assertThat;
 class KissoAuthenticationSuccessHandlerTest {
 
     @Test
-    @DisplayName("Instance can be created via constructor")
+    @DisplayName("Instance can be created")
     void testInstantiation() {
-        KissoAuthenticationSuccessHandler instance = new KissoAuthenticationSuccessHandler();
-        assertThat(instance).isNotNull();
+        KissoAuthenticationSuccessHandler handler = new KissoAuthenticationSuccessHandler();
+        assertThat(handler).isNotNull();
+    }
+
+    @Test
+    @DisplayName("getOrder returns expected value")
+    void testGetOrder() {
+        KissoAuthenticationSuccessHandler handler = new KissoAuthenticationSuccessHandler();
+        assertThat(handler.getOrder()).isEqualTo(Integer.MAX_VALUE - 2);
+    }
+
+    @Test
+    @DisplayName("supports returns true for KissoLoginToken")
+    void testSupportsKissoLoginToken() {
+        KissoAuthenticationSuccessHandler handler = new KissoAuthenticationSuccessHandler();
+        assertThat(handler.supports(new KissoLoginToken())).isTrue();
+    }
+
+    @Test
+    @DisplayName("supports returns false for non-KissoLoginToken")
+    void testSupportsNonKissoToken() {
+        KissoAuthenticationSuccessHandler handler = new KissoAuthenticationSuccessHandler();
+        assertThat(handler.supports(new org.apache.shiro.authc.UsernamePasswordToken("u", "p"))).isFalse();
     }
 }

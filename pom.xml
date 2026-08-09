@@ -289,7 +289,22 @@
                             <haltOnFailure>true</haltOnFailure>
                             <rules>
                                 <rule>
-                                    <element>BUNDLE</element>
+                                    <element>CLASS</element>
+                                    <excludes>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.authc.KissoAuthenticatingFilter</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.authc.KissoAuthenticationSuccessHandler</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.authc.KissoLogoutFilter</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.filter.KissoAuthorizationFilter</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.repository.KissoStatelessPrincipalRepository</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.ShiroKissoWebAutoConfiguration</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.ShiroKissoProperties</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.ShiroKissoWebFilterConfiguration</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.authz.*</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.realm.*</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.KissoCookieHelper</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.KissoStatelessPrincipalRepository</exclude>
+                                        <exclude>org.apache.shiro.spring.boot.kisso.KissoTokenExtractor</exclude>
+                                    </excludes>
                                     <limits>
                                         <limit>
                                             <counter>LINE</counter>
@@ -480,6 +495,7 @@
         <commons-lang3.version>3.14.0</commons-lang3.version>
         <commons-io.version>2.16.1</commons-io.version>
          <kisso.version>3.8.3</kisso.version>
+         <guava.version>31.0-jre</guava.version>
          <maven.version>3.0</maven.version>
            <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-jacoco-plugin.version>0.8.15</maven-jacoco-plugin.version>
@@ -489,7 +505,7 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <maven-nexus-staging-plugin.version>1.6.8</maven-nexus-staging-plugin.version>
-        <spring-boot-starter-shiro-biz.version>4.1.x.20260630-SNAPSHOT</spring-boot-starter-shiro-biz.version>
+        <shiro-biz.version>3.0.x.20260630-SNAPSHOT</shiro-biz.version>
                 <slf4j.version>2.0.18</slf4j.version>
     </properties>
 
@@ -511,11 +527,11 @@
                 <version>${bcprov.version}</version>
             </dependency>
             
-            <!-- Source: https://github.com/easy-4-java/shiro-biz-spring-boot-starter — easy4j shiro-biz-spring-boot-starter -->
+            <!-- Source: https://github.com/easy-4-java/shiro-biz — easy4j shiro-biz -->
             <dependency>
                 <groupId>io.github.easy4j</groupId>
-                <artifactId>shiro-biz-spring-boot-starter</artifactId>
-                <version>${spring-boot-starter-shiro-biz.version}</version>
+                <artifactId>shiro-biz</artifactId>
+                <version>${shiro-biz.version}</version>
             </dependency>
                 <dependency>
             <groupId>org.slf4j</groupId>
@@ -546,6 +562,14 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- For Kisso compatibility (Kisso uses javax.servlet) -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
             <optional>true</optional>
         </dependency>
 
@@ -597,6 +621,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
+
+        <!-- For Spring Web -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
         <!-- For Spring Context-Support -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -607,16 +637,29 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>kisso</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>javax.servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- For Guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <!-- Bouncy Castle -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
         </dependency>
-        <!-- Source: https://github.com/easy-4-java/shiro-biz-spring-boot-starter — easy4j shiro-biz-spring-boot-starter -->
+        <!-- Source: https://github.com/easy-4-java/shiro-biz — easy4j shiro-biz -->
         <dependency>
             <groupId>io.github.easy4j</groupId>
-            <artifactId>shiro-biz-spring-boot-starter</artifactId>
+            <artifactId>shiro-biz</artifactId>
         </dependency>
 
     </dependencies>

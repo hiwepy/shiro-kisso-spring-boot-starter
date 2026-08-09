@@ -15,6 +15,7 @@
  */
 package org.apache.shiro.spring.boot.kisso.authc;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.servlet.ServletRequest;
@@ -23,18 +24,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.biz.authc.AuthenticationSuccessHandler;
 import org.apache.shiro.biz.authz.principal.ShiroPrincipal;
 import org.apache.shiro.biz.utils.SubjectUtils;
-import org.apache.shiro.biz.utils.WebUtils;
+import org.apache.shiro.spring.boot.kisso.KissoCookieHelper;
 import org.apache.shiro.spring.boot.kisso.token.KissoLoginToken;
 import org.apache.shiro.subject.Subject;
 
-import com.baomidou.kisso.SSOHelper;
 import com.baomidou.kisso.security.token.SSOToken;
-import com.google.common.collect.Maps;
-
-import io.jsonwebtoken.impl.DefaultClaims;
 
 
 /**
@@ -45,43 +41,44 @@ import io.jsonwebtoken.impl.DefaultClaims;
  * @author [@Loong Wan](https://github.com/loong10k)
  * @since 1.0.0
  */
-public class KissoAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class KissoAuthenticationSuccessHandler {
 
 	public KissoAuthenticationSuccessHandler() {
 	}
-	 
-	@Override
+
 	public boolean supports(AuthenticationToken token) {
 		return SubjectUtils.isAssignableFrom(token.getClass(), KissoLoginToken.class);
 	}
 
-	@Override
 	public void onAuthenticationSuccess(AuthenticationToken token, ServletRequest request, ServletResponse response,
 			Subject subject) {
-		
-		HttpServletRequest httpRequest = WebUtils.toHttp(request);
-		HttpServletResponse httpResponse = WebUtils.toHttp(response);
+
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		ShiroPrincipal principal = (ShiroPrincipal) subject.getPrincipal();
 
-		Map<String, Object> map = Maps.newHashMap();
+		Map<String, Object> map = new HashMap<>();
 		map.put("userid", principal.getUserid());
 		map.put("userkey", principal.getUserkey());
 		map.put("username", principal.getUsername());
 		map.put("roles", principal.getRoles());
 		map.put("perms", principal.getRoles());
 
-		SSOToken ssoToken = SSOToken.create().setIp(httpRequest).setUserAgent(httpRequest).setId(principal.getUserid())
-				.setIssuer("kisso").setClaims(new DefaultClaims(map));
+		SSOToken ssoToken = SSOToken.create()
+				.setIp(httpRequest.getRemoteAddr())
+				.setUserAgent(httpRequest.getHeader("User-Agent"))
+				.setId(principal.getUserid())
+				.setIssuer("kisso")
+				.setClaims(new io.jsonwebtoken.impl.DefaultClaims(map));
 
 		// 设置登录 COOKIE
-		SSOHelper.setCookie(httpRequest, httpResponse, ssoToken, false);
+		KissoCookieHelper.setCookie(httpRequest, httpResponse, ssoToken, false);
 
 	}
 
-	@Override
 	public int getOrder() {
 		return Integer.MAX_VALUE - 2;
 	}
-	
+
 }

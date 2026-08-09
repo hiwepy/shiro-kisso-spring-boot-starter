@@ -3,6 +3,7 @@ package org.apache.shiro.spring.boot.kisso.realm;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.biz.realm.AbstractAuthorizingRealm;
@@ -21,7 +22,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 public class KissoStatelessAuthorizingRealm extends AbstractAuthorizingRealm {
 
 	@Override
-	public Class<?> getAuthenticationTokenClass() {
+	public Class<? extends AuthenticationToken> getAuthenticationTokenClass() {
 		return KissoAccessToken.class;// 此Realm只支持KissoAccessToken
 	}
 	

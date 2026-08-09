@@ -1,15 +1,11 @@
 package org.apache.shiro.spring.boot;
 
 import org.apache.shiro.spring.boot.kisso.KissoStatelessPrincipalRepository;
-import org.apache.shiro.spring.web.config.AbstractShiroWebConfiguration;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,10 +32,8 @@ import com.baomidou.kisso.web.handler.SSOHandlerInterceptor;
 @ConditionalOnProperty(prefix = ShiroKissoProperties.PREFIX, value = "enabled", havingValue = "true")
 @EnableConfigurationProperties({ ShiroKissoProperties.class })
 @ImportAutoConfiguration(KissoAutoConfiguration.class)
-public class ShiroKissoWebAutoConfiguration extends AbstractShiroWebConfiguration implements ApplicationContextAware {
+public class ShiroKissoWebAutoConfiguration {
 
-	private ApplicationContext applicationContext;
-	
 	/**
 	 * Creates a {@link SSOAuthorization} if no existing bean is present.
 	 *
@@ -71,15 +65,6 @@ public class ShiroKissoWebAutoConfiguration extends AbstractShiroWebConfiguratio
 	@ConditionalOnMissingBean
 	public KissoStatelessPrincipalRepository kissoPrincipalRepository() {
 		return new KissoStatelessPrincipalRepository();
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
-
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
 	}
 
 }
