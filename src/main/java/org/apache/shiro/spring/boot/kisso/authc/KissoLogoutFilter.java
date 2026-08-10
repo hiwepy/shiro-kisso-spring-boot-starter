@@ -31,7 +31,7 @@ import com.baomidou.kisso.SSOHelper;
 
 /**
  * Kisso 注销过滤器：清除Shiro状态数据和自身缓存数据
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  */
 public class KissoLogoutFilter extends AbstractLogoutFilter {
 
