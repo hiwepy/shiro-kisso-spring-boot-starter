@@ -24,7 +24,7 @@ import com.baomidou.kisso.annotation.Permission;
 
 /**
  * TODO
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  */
 public class KissoPermissionAnnotationHandler extends AuthorizingAnnotationHandler {
     
