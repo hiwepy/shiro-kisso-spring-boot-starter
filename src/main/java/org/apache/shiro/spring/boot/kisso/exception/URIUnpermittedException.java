@@ -22,7 +22,7 @@ import org.apache.shiro.authc.AuthenticationException;
  * <p>Extends {@link AuthenticationException} to indicate that the requested
  * URI does not have sufficient permissions in the Kisso authorization check.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class URIUnpermittedException extends AuthenticationException {

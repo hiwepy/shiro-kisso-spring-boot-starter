@@ -12,7 +12,7 @@ import com.baomidou.kisso.security.token.SSOToken;
  * <p>Bridges the gap between Jakarta Servlet API (used by Spring Boot 4.1)
  * and Kisso's javax.servlet-based cookie handling.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public final class KissoCookieHelper {

@@ -23,7 +23,7 @@ import org.apache.shiro.authz.aop.AuthorizingAnnotationMethodInterceptor;
  * <p>Intercepts method invocations annotated with Kisso permission annotations
  * and delegates authorization checks to the {@link KissoPermissionAnnotationHandler}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class KissoPermissionAnnotationMethodInterceptor extends AuthorizingAnnotationMethodInterceptor {

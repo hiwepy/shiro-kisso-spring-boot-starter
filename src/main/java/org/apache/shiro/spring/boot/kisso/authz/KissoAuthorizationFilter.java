@@ -37,7 +37,7 @@ import org.apache.shiro.spring.boot.kisso.KissoTokenExtractor;
  * then delegates to Shiro's subject.login() for authentication. Handles
  * both stateless (AJAX) and stateful (redirect) authorization failure modes.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class KissoAuthorizationFilter implements Filter {

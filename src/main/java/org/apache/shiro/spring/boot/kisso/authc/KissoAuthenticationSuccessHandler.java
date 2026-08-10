@@ -38,7 +38,7 @@ import com.baomidou.kisso.security.token.SSOToken;
  * <p>Creates a Kisso SSO token with user principal information and sets it
  * as a cookie in the response upon successful authentication.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class KissoAuthenticationSuccessHandler {

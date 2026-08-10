@@ -24,7 +24,7 @@ import com.baomidou.kisso.security.token.SSOToken;
  * <p>Implements {@link HostAuthenticationToken} to carry the client host information
  * along with the SSO token for authentication.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @SuppressWarnings("serial")

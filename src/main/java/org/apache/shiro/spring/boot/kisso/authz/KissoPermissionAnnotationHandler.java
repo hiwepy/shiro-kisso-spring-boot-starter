@@ -28,7 +28,7 @@ import com.baomidou.kisso.annotation.Permission;
  * performing permission checks via Shiro's subject when the annotation
  * is not marked as ignored.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class KissoPermissionAnnotationHandler extends AuthorizingAnnotationHandler {

@@ -22,7 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * <p>Binds to the {@code shiro.kisso} prefix and controls whether
  * Kisso-based SSO authentication is enabled.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 @ConfigurationProperties(ShiroKissoProperties.PREFIX)

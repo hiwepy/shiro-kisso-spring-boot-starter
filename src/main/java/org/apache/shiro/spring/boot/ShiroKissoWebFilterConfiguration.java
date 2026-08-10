@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * <p>Registers Kisso-specific filters into the Shiro filter chain.
  * Activated only when {@code shiro.kisso.enabled=true}.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  * @see <a href="https://gitee.com/baomidou/kisso">Kisso Documentation</a>
  */

@@ -51,7 +51,7 @@ import org.apache.shiro.spring.boot.kisso.token.KissoAccessToken;
  * and delegates authentication to Shiro's subject.login() mechanism.
  * Handles both stateless and stateful authentication modes.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class KissoAuthenticatingFilter implements Filter {

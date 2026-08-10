@@ -37,7 +37,7 @@ import com.google.common.collect.Sets;
  * <p>Extracts user identity, roles, and permissions from the Kisso {@link SSOToken}
  * and builds a {@link KissoStatelessPrincipal} with the extracted information.</p>
  *
- * @author [@Loong Wan](https://github.com/loong10k)
+ * @author <a href="https://github.com/loong10k">Loong Wan</a>
  * @since 1.0.0
  */
 public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryImpl{
