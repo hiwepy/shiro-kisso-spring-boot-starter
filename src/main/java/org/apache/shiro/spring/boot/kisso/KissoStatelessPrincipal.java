@@ -36,6 +36,11 @@ public class KissoStatelessPrincipal extends ShiroPrincipal {
 		this.token = token;
 	}
 
+	/**
+	 * Returns the token.
+	 *
+	 * @return the token
+	 */
 	public SSOToken getToken() {
 		return token;
 	}

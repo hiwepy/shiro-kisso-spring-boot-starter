@@ -38,6 +38,12 @@ public class KissoPermissionAnnotationHandler extends AuthorizingAnnotationHandl
 	}
 	
 	@Override
+	/**
+	 * assert Authorized.
+	 *
+	 * @param a the a
+	 * @throws AuthorizationException if an error occurs
+	 */
 	public void assertAuthorized(Annotation a) throws AuthorizationException {
 		Permission pm = (Permission) a;
 		if (pm != null) {

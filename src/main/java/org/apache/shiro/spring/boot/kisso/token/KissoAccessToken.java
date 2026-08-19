@@ -41,20 +41,40 @@ public class KissoAccessToken implements HostAuthenticationToken {
 	}
 
 	@Override
+	/**
+	 * Returns the principal.
+	 *
+	 * @return the principal
+	 */
 	public Object getPrincipal() {
 		return this.token;
 	}
 
 	@Override
+	/**
+	 * Returns the credentials.
+	 *
+	 * @return the credentials
+	 */
 	public Object getCredentials() {
 		return this.token;
 	}
 	
 	@Override
+	/**
+	 * Returns the host.
+	 *
+	 * @return the host
+	 */
 	public String getHost() {
 		return host;
 	}
 
+	/**
+	 * Returns the token.
+	 *
+	 * @return the token
+	 */
 	public SSOToken getToken() {
 		return token;
 	}

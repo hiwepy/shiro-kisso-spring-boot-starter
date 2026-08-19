@@ -49,11 +49,24 @@ public class KissoAuthorizationFilter implements Filter {
     private SSOAuthorization authorization = new AuthDefaultImpl();
 
 	@Override
+	/**
+	 * init.
+	 *
+	 * @param filterConfig the filter config
+	 * @throws ServletException if an error occurs
+	 */
 	public void init(FilterConfig filterConfig) throws ServletException {
 		// no-op
 	}
 
 	@Override
+	/**
+	 * do Filter.
+	 *
+	 * @param request the request
+	 * @param response the response
+	 * @param filterChain the filter chain
+	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
 
@@ -108,6 +121,10 @@ public class KissoAuthorizationFilter implements Filter {
 	}
 
 	@Override
+	/**
+	 * destroy.
+	 *
+	 */
 	public void destroy() {
 		// no-op
 	}

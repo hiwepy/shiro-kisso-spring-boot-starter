@@ -46,6 +46,12 @@ public class KissoAuthenticationSuccessHandler {
 	public KissoAuthenticationSuccessHandler() {
 	}
 
+	/**
+	 * supports.
+	 *
+	 * @param token the token
+	 * @return the result
+	 */
 	public boolean supports(AuthenticationToken token) {
 		return SubjectUtils.isAssignableFrom(token.getClass(), KissoLoginToken.class);
 	}
@@ -77,6 +83,11 @@ public class KissoAuthenticationSuccessHandler {
 
 	}
 
+	/**
+	 * Returns the order.
+	 *
+	 * @return the order
+	 */
 	public int getOrder() {
 		return Integer.MAX_VALUE - 2;
 	}

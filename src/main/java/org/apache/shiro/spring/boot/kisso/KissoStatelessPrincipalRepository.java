@@ -43,6 +43,13 @@ import com.google.common.collect.Sets;
 public class KissoStatelessPrincipalRepository extends ShiroPrincipalRepositoryImpl{
 	
 	@Override
+	/**
+	 * get Authentication Info.
+	 *
+	 * @param token the token
+	 * @return the result
+	 * @throws AuthenticationException if an error occurs
+	 */
 	public AuthenticationInfo getAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		
 		KissoAccessToken kissoToken = (KissoAccessToken) token;
